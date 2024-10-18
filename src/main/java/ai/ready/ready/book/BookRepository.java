@@ -1,4 +1,4 @@
-package ai.ready.ready;
+package ai.ready.ready.book;
 
 import org.springframework.data.repository.CrudRepository;
 
