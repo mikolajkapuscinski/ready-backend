@@ -22,14 +22,25 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
+    @GetMapping
+    public List<Book> getBookByTitle(@RequestParam("title") String title) {
+        return bookService.getBookByTitle(title);
+    }
+
+    @GetMapping
+    public List<Book> getBookByAuthor(@RequestParam("author") String author) {
+        return bookService.getBookByAuthor(author);
+    }
+
     @PostMapping
     public Book addBook(@RequestBody Book book) {
         return bookService.createBook(book);
     }
 
-    @DeleteMapping
-    public void deleteBook(@RequestBody Book book) {
-        bookService.deleteById(book.getId());
+
+     @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable Long id) {
+        bookService.deleteById(id);
     }
 
 
