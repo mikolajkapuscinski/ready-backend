@@ -13,23 +13,18 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<Book> getBooks() {
-        return bookService.getAllBooks();
+    public List<Book> getBooks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author
+    ) {
+
+        return bookService.getBooks(title, author);
     }
+
 
     @GetMapping("/{id}")
     public Book getBook(@PathVariable Long id) {
         return bookService.getBookById(id);
-    }
-
-    @GetMapping
-    public List<Book> getBookByTitle(@RequestParam("title") String title) {
-        return bookService.getBookByTitle(title);
-    }
-
-    @GetMapping
-    public List<Book> getBookByAuthor(@RequestParam("author") String author) {
-        return bookService.getBookByAuthor(author);
     }
 
     @PostMapping
