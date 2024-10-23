@@ -1,22 +1,15 @@
 package ai.ready.ready.book;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import ai.ready.ready.user.User;
+import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 
+import java.util.Set;
+
 @Entity
-@Getter
+@Data
 public class Book {
-
-    protected Book() {}
-
-    public Book(String title, String author, int numberOfPages) {
-        this.title = title;
-        this.author = author;
-        this.numberOfPages = numberOfPages;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +17,8 @@ public class Book {
     private String title;
     private String author;
     private Integer numberOfPages;
+
+    @OneToMany(mappedBy = "user")
+    Set<User> owners;
 
 }
