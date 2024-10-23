@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class UserBooks {
+public class BookPossession {
 
     @EmbeddedId
-    UserBookKey id;
+    BookPossessionKey id;
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "user_id")
     User user;
 
     @ManyToOne

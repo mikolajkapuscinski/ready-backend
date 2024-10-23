@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
-public class UserBookKey implements Serializable {
+public class BookPossessionKey implements Serializable {
 
     @Column(name = "user_id")
     Long userId;

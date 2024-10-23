@@ -1,6 +1,6 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.book.Book;
+import ai.ready.ready.BookPossession;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,10 +9,12 @@ import java.util.Set;
 
 @Entity
 @Data
+@Table(name = "ready_users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     private String username;
     private String password;
@@ -21,6 +23,6 @@ public class User {
     private boolean active;
 
     @OneToMany(mappedBy = "user")
-    private Set<Book> books;
+    private Set<BookPossession> books;
 
 }

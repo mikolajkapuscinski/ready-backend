@@ -1,9 +1,8 @@
 package ai.ready.ready.book;
 
-import ai.ready.ready.user.User;
+import ai.ready.ready.BookPossession;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.Set;
 
@@ -13,12 +12,13 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private Long id;
     private String title;
     private String author;
     private Integer numberOfPages;
 
-    @OneToMany(mappedBy = "user")
-    Set<User> owners;
+    @OneToMany(mappedBy = "book")
+    Set<BookPossession> owners;
 
 }
