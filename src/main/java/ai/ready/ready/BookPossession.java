@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "book_possession")
 public class BookPossession {
 
     @EmbeddedId
