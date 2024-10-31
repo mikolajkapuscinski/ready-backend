@@ -50,3 +50,10 @@ INSERT INTO book (title, author, number_of_pages) VALUES
                                                      ('It', 'Stephen King', 1138),
                                                      ('Dune', 'Frank Herbert', 604),
                                                      ('The Handmaid Tale', 'Margaret Atwood', 311);
+INSERT INTO ready_users (username, password, email, creation_date, active)
+VALUES
+    ('john_doe', 'pass123', 'john.doe@email.com', '2024-01-01', true),
+    ('jane_smith', 'pass123', 'jane.smith@email.com', '2024-02-15', true),
+    ('bob_wilson', 'pass123', 'bob.wilson@email.com', '2024-03-20', true),
+    ('alice_brown', 'pass123', 'alice.brown@email.com', '2024-04-01', false),
+    ('sam_jones', 'pass123', 'sam.jones@email.com', '2024-04-15', true);
