@@ -18,6 +18,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    @Column(nullable = false, unique = true)
     private String email;
     private LocalDate creationDate;
     private boolean active;
