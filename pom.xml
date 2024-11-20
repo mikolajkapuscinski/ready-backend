@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ai.ready</groupId>
-	<artifactId>ready</artifactId>
+	<artifactId>ready-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ready</name>
 	<description>ready</description>
