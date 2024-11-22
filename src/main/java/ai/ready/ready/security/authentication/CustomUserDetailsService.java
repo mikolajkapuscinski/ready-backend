@@ -1,4 +1,4 @@
-package ai.ready.ready.security;
+package ai.ready.ready.security.authentication;
 
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;

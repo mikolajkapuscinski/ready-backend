@@ -1,7 +1,7 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.user.dto.LoginRequest;
-import ai.ready.ready.user.dto.RegistrationRequest;
+import ai.ready.ready.security.authentication.dto.LoginRequest;
+import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

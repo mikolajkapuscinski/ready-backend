@@ -1,4 +1,4 @@
-package ai.ready.ready;
+package ai.ready.ready.book.bookPossesion;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

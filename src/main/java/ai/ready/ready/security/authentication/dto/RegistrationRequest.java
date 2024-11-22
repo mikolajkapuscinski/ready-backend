@@ -1,4 +1,4 @@
-package ai.ready.ready.user.dto;
+package ai.ready.ready.security.authentication.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
