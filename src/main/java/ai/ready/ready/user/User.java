@@ -2,14 +2,21 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.BookPossession;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ready_users")
+@Builder
 public class User {
 
     @Id
@@ -22,6 +29,8 @@ public class User {
     private String email;
     private LocalDate creationDate;
     private boolean active;
+    @OneToMany
+    private List<Role> roles;
 
     @OneToMany(mappedBy = "user")
     private Set<BookPossession> books;

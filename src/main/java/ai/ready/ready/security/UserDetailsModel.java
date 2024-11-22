@@ -2,12 +2,13 @@ package ai.ready.ready.security;
 
 import ai.ready.ready.user.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetailsModel implements UserDetails {
+public class UserDetailsModel implements UserDetails, GrantedAuthoritiesMapper {
 
     private final String email;
     private final String password;
@@ -52,5 +53,10 @@ public class UserDetailsModel implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> mapAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        return List.of();
     }
 }

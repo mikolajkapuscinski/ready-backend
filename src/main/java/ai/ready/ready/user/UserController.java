@@ -1,8 +1,11 @@
 package ai.ready.ready.user;
 
+import ai.ready.ready.user.dto.LoginRequest;
+import ai.ready.ready.user.dto.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -13,14 +16,15 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
-    public User login(final String email, final String password) {
-        return userService.login(email, password);
+    @PostMapping("/login")
+    public String login(@RequestBody final LoginRequest request)
+    {
+        return userService.login(request);
     }
 
     @PostMapping("/register")
-    public User register(final User user) {
-        return userService.register(user);
+    public void register(@RequestBody final RegistrationRequest request) {
+        userService.register(request);
     }
 
     @GetMapping("/users")
