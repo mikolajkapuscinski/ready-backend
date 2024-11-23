@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,11 @@ public class UserService {
                 loginRequest.getEmail(),
                 loginRequest.getPassword()
         );
-        Authentication authResponse = authenticationManager.authenticate(authRequest);
-        return authResponse.isAuthenticated() ? "Allow" : "Deny";
+        Authentication auth = authenticationManager.authenticate(authRequest);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+        return auth.isAuthenticated() ? "Allow" : "Deny";
     }
 
     public void register(final RegistrationRequest request) {
