@@ -20,18 +20,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     public String login(final LoginRequest loginRequest) {
-        Authentication authRequest = UsernamePasswordAuthenticationToken.unauthenticated(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-        );
-        Authentication auth = authenticationManager.authenticate(authRequest);
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(auth);
-        SecurityContextHolder.setContext(context);
-        return auth.isAuthenticated() ? "Allow" : "Deny";
+        return "login";
     }
 
     public void register(final RegistrationRequest request) {

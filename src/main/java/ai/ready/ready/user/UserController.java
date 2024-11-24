@@ -16,6 +16,10 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/login")
+    public String login(){
+        return "ddd";
+    }
     @PostMapping("/login")
     public String login(@RequestBody final LoginRequest request)
     {
