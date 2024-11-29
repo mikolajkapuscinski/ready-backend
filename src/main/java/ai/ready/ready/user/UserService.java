@@ -1,13 +1,11 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.security.authentication.dto.LoginRequest;
+import ai.ready.ready.book.Book;
+import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
+import ai.ready.ready.user.dto.ProfileDto;
+import ai.ready.ready.user.dto.ReadingStats;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +18,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public String login(final LoginRequest loginRequest) {
-        return "login";
-    }
 
     public void register(final RegistrationRequest request) {
         User user = User.builder()
@@ -38,5 +32,18 @@ public class UserService {
 
     public List<User> getUsers() {
         return (List<User>) userRepository.findAll();
+    }
+
+    public ProfileDto getProfile(UserDetailsModel userDetails) {
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        ReadingStats readingStats = gatherReadingStats(user.getId());
+        List<Book> currentlyReading = List.of(); //TODO
+        List<Book> recentlyFinished = List.of(); //TODO
+        return new ProfileDto(
+                user.getUsername(),
+                user.getImage(),
+                currentlyReading,
+                recentlyFinished,
+                readingStats);
     }
 }

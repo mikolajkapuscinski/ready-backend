@@ -29,6 +29,4 @@ public class BookPossession {
     LocalDateTime possessionDate;
     Integer rating;
     BookState state;
-
-
 }

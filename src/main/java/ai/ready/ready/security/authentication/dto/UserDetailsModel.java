@@ -1,4 +1,4 @@
-package ai.ready.ready.security.authentication;
+package ai.ready.ready.security.authentication.dto;
 
 import ai.ready.ready.user.User;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,5 +1,6 @@
 package ai.ready.ready.security.authentication;
 
+import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;
 import lombok.RequiredArgsConstructor;

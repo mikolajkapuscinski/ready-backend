@@ -23,6 +23,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+    private String image;
     private String username;
     private String password;
     @Column(nullable = false, unique = true)
