@@ -36,7 +36,7 @@ public class UserService {
 
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
-        ReadingStats readingStats = gatherReadingStats(user.getId());
+        ReadingStats readingStats = gatherUserStats(user.getId()); //TODO
         List<Book> currentlyReading = List.of(); //TODO
         List<Book> recentlyFinished = List.of(); //TODO
         return new ProfileDto(
@@ -45,5 +45,12 @@ public class UserService {
                 currentlyReading,
                 recentlyFinished,
                 readingStats);
+    }
+
+    ReadingStats gatherUserStats(Long userId) {
+        return new ReadingStats(
+                userRepository.findTotalPagesByUserId(userId),
+                userRepository.findTotalBooksByUserId(userId)
+        );
     }
 }

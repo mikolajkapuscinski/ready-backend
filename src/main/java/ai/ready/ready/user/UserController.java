@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ProfileDto getProfile(@AuthenticationPrincipal UserDetailsModel user) {
-        return userService.getProfile(user);
+    public ProfileDto getProfile(@AuthenticationPrincipal UserDetailsModel userDetails) {
+        return userService.getProfile(userDetails);
     }
 }
