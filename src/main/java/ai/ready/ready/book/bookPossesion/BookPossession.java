@@ -5,6 +5,7 @@ import ai.ready.ready.book.BookState;
 import ai.ready.ready.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -26,7 +27,10 @@ public class BookPossession {
     @JoinColumn(name = "book_id")
     Book book;
 
+    @CreationTimestamp
     LocalDateTime possessionDate;
     Integer rating;
+
+    @Enumerated(EnumType.STRING)
     BookState state;
 }
