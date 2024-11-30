@@ -52,8 +52,17 @@ INSERT INTO book (title, author, number_of_pages) VALUES
                                                      ('The Handmaid Tale', 'Margaret Atwood', 311);
 INSERT INTO ready_users (username, password, email, creation_date, active)
 VALUES
-    ('john_doe', 'pass123', 'john.doe@email.com', '2024-01-01', true),
-    ('jane_smith', 'pass123', 'jane.smith@email.com', '2024-02-15', true),
-    ('bob_wilson', 'pass123', 'bob.wilson@email.com', '2024-03-20', true),
-    ('alice_brown', 'pass123', 'alice.brown@email.com', '2024-04-01', false),
-    ('sam_jones', 'pass123', 'sam.jones@email.com', '2024-04-15', true);
+    ('john_doe', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'john.doe@email.com', '2024-01-01', true),
+    ('jane_smith', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'jane.smith@email.com', '2024-02-15', true),
+    ('bob_wilson', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'bob.wilson@email.com', '2024-03-20', true),
+    ('alice_brown', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'alice.brown@email.com', '2024-04-01', false),
+    ('sam_jones', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'sam.jones@email.com', '2024-04-15', true);
+
+INSERT INTO book_possession (rating, state, book_id, user_id)
+VALUES
+    (5,'IN_PROGRESS', 1, 5),
+    (5,'FINISHED', 13, 5),
+    (5,'FINISHED', 24, 5),
+    (5,'FINISHED', 1, 3),
+    (5,'FINISHED', 43, 5),
+    (5,'IN_PROGRESS', 3, 4);
