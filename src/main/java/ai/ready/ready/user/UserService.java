@@ -7,6 +7,7 @@ import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.ReadingStats;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Limit;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +40,8 @@ public class UserService {
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
         ReadingStats readingStats = gatherUserStats(user.getId());
-        List<Book> currentlyReading = List.of(); //TODO
-        List<Book> recentlyFinished = List.of(); //TODO
+        List<Book> currentlyReading = bookRepository.findCurrentlyReadingBooksByUserId(user.getId());
+        List<Book> recentlyFinished = bookRepository.findRecentlyFinishedBooksByUserId(user.getId(), Limit.of(5)); //TODO
         return new ProfileDto(
                 user.getUsername(),
                 user.getImage(),
@@ -51,8 +52,8 @@ public class UserService {
 
     ReadingStats gatherUserStats(Long userId) {
         return new ReadingStats(
-                bookRepository.findTotalPagesByUserId(userId),
-                bookRepository.findTotalBooksByUserId(userId)
+                bookRepository.findNumberOfFinishedBooksByUserId(userId),
+                bookRepository.findFinishedPagesByUserId(userId)
         );
     }
 }
