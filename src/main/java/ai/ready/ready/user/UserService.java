@@ -1,6 +1,7 @@
 package ai.ready.ready.user;
 
 import ai.ready.ready.book.Book;
+import ai.ready.ready.book.BookRepository;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
@@ -18,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BookRepository bookRepository;
 
     public void register(final RegistrationRequest request) {
         User user = User.builder()
@@ -36,7 +38,7 @@ public class UserService {
 
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
-        ReadingStats readingStats = gatherUserStats(user.getId()); //TODO
+        ReadingStats readingStats = gatherUserStats(user.getId());
         List<Book> currentlyReading = List.of(); //TODO
         List<Book> recentlyFinished = List.of(); //TODO
         return new ProfileDto(
@@ -49,8 +51,8 @@ public class UserService {
 
     ReadingStats gatherUserStats(Long userId) {
         return new ReadingStats(
-                userRepository.findTotalPagesByUserId(userId),
-                userRepository.findTotalBooksByUserId(userId)
+                bookRepository.findTotalPagesByUserId(userId),
+                bookRepository.findTotalBooksByUserId(userId)
         );
     }
 }
