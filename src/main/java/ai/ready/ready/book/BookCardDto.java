@@ -1,6 +1,6 @@
-package ai.ready.ready.book.bookPossesion;
+package ai.ready.ready.book;
 
-public record BookGlanceDto(
+public record BookCardDto(
     Long id,
     String title,
     String author,

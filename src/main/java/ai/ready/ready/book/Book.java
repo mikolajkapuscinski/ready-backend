@@ -18,7 +18,7 @@ public class Book {
     private String author;
     private String isbn;
     private String coverUrl;
-     private Integer numberOfPages;
+    private Integer numberOfPages;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     Set<BookPossession> owners;
