@@ -8,16 +8,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 @AllArgsConstructor
+@CrossOrigin
 public class BookController {
 
     private final BookService bookService;
 
     @GetMapping
-    public List<Book> getBooks(
+    public List<BookCardDto> getBooks(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String author
     ) {
-
         return bookService.getBooks(title, author);
     }
 

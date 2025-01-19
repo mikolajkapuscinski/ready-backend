@@ -10,16 +10,17 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookCardDtoMapper bookCardDtoMapper;
 
-    public List<Book> getBooks(String title, String author) {
+    public List<BookCardDto> getBooks(String title, String author) {
         if (title == null && author == null)
-            return (List<Book>) bookRepository.findAll();
+            return  bookCardDtoMapper.toBookCardDtoList((List<Book>) bookRepository.findAll());
         if (title == null)
-            return bookRepository.findByAuthor(author);
+            return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByAuthor(author));
         if (author == null)
-            return bookRepository.findByTitle(title);
+            return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByTitle(title));
 
-        return bookRepository.findByTitleAndAuthor(title, author);
+        return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByTitleAndAuthor(title, author));
     }
 
     public Book getBookById(Long id) {
