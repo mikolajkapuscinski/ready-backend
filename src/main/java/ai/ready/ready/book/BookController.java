@@ -8,7 +8,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 @AllArgsConstructor
-@CrossOrigin
 public class BookController {
 
     private final BookService bookService;
