@@ -1,10 +1,13 @@
 package ai.ready.ready.security;
 
 import ai.ready.ready.security.authentication.JsonAuthFilter;
+import ai.ready.ready.security.authentication.JwtAuthFilter;
 import ai.ready.ready.security.authentication.RestAuthFailureHandler;
 import ai.ready.ready.security.authentication.RestAuthSuccessHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,17 +29,28 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
     private final RestAuthSuccessHandler successHandler;
     private final RestAuthFailureHandler failureHandler;
+
+    public SecurityConfig(UserDetailsService userDetailsService, ObjectMapper objectMapper,
+                          RestAuthSuccessHandler successHandler,
+                          RestAuthFailureHandler failureHandler,
+                          @Value("${jwt.secret}") String secret) {
+        this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
+        this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+        this.secret = secret;
+    }
+
+    private final String secret;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,6 +62,7 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
                      auth ->{
+                         auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.requestMatchers(
                                  "/v3/**",
                                  "/swagger-ui/**",
@@ -57,7 +73,9 @@ public class SecurityConfig {
                      }
                 )
                 .addFilter(jsonAuthFilter())
-                .authenticationManager(authenticationManager())
+                .addFilter(new JwtAuthFilter(authenticationManager(), userDetailsService, secret))
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
 
@@ -88,8 +106,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
