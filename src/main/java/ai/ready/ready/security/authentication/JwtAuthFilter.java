@@ -4,8 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,10 +16,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class JwtAuthFilter extends BasicAuthenticationFilter {
 
-    private static final String TOKEN_HEADER = "Authorization";
+    private static final String COOKIE_NAME = "token";
     private static final String TOKEN_PREFIX = "Bearer ";
     private final UserDetailsService userDetailsService;
     private final String secret;
@@ -31,7 +34,7 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-        if (authentication != null) {
+        if (authentication == null) {
             chain.doFilter(request, response);
             return;
         }
@@ -40,8 +43,12 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(TOKEN_HEADER);
-        if (token != null && token.startsWith(TOKEN_PREFIX)) {
+        String token = Arrays.stream(request.getCookies())
+                .filter((c) -> c.getName().equals(COOKIE_NAME))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElseThrow(() -> new AccessDeniedException("Token not found"));
+        if (token != null) {
             String username = JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
