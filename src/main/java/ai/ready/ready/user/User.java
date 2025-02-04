@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,11 +24,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-    private String image;
+    private String imageUrl;
     private String username;
     private String password;
     @Column(nullable = false, unique = true)
     private String email;
+    @CreationTimestamp
     private LocalDate creationDate;
     private boolean active;
     @OneToMany

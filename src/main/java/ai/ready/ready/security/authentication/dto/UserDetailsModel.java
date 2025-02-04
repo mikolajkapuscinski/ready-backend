@@ -1,6 +1,7 @@
 package ai.ready.ready.security.authentication.dto;
 
 import ai.ready.ready.user.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,11 +11,14 @@ import java.util.List;
 
 public class UserDetailsModel implements UserDetails, GrantedAuthoritiesMapper {
 
+    @Getter
+    private final Long id;
     private final String email;
     private final String password;
     private final List<GrantedAuthority> authorities;
 
     public UserDetailsModel(User user) {
+        id = user.getId();
         email = user.getEmail();
         password = user.getPassword();
         authorities = null;
