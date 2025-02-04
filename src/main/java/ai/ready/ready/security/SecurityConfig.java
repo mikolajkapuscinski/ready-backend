@@ -28,6 +28,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -75,6 +76,10 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthFilter(authenticationManager(), userDetailsService, secret))
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .logout( (logout) -> logout
+                        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+                        .deleteCookies("token")
+                )
                 .build();
     }
 
@@ -105,7 +110,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Cookie"));
         corsConfiguration.setAllowCredentials(true);
