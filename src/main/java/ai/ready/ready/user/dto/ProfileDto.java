@@ -1,18 +1,20 @@
 package ai.ready.ready.user.dto;
 
 import ai.ready.ready.book.BookCardDto;
+import ai.ready.ready.book.bookPossesion.Review;
+import ai.ready.ready.user.Badge;
 
+import java.util.Date;
 import java.util.List;
 
 public record ProfileDto (
         String username,
         String image,
-        Integer numberOfFollowers,
-        Integer numberOfFollowed,
+        Date dateOfJoin,
         List<BookCardDto> currentlyReading,
         List<BookCardDto> recentlyFinished,
         List<BookCardDto> toRead,
         ReadingStats readingStats,
-        List<Bagde> badges,
+        List<Badge> badges,
         List<Review> reviews
 ){}
