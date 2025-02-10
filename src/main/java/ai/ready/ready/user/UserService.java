@@ -1,17 +1,19 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.book.Book;
-import ai.ready.ready.book.BookRepository;
+import ai.ready.ready.book.BookCardDto;
+import ai.ready.ready.book.BookService;
+import ai.ready.ready.book.bookPossesion.Review;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.ReadingStats;
+import ai.ready.ready.user.expPoints.Level;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Limit;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,14 +22,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
     public void register(final RegistrationRequest request) {
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .creationDate(LocalDate.now())
+                .creationDate(new Date())
                 .active(true)
                 .build();
         userRepository.save(user);
@@ -39,21 +41,37 @@ public class UserService {
 
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
-        ReadingStats readingStats = gatherUserStats(user.getId());
-        List<Book> currentlyReading = bookRepository.findCurrentlyReadingBooksByUserId(user.getId());
-        List<Book> recentlyFinished = bookRepository.findRecentlyFinishedBooksByUserId(user.getId(), Limit.of(5)); //TODO
+        ReadingStats readingStats = gatherUserStats(user);
+        List<BookCardDto> currentlyReading = bookService.getCurrentlyReadingByUserId(user.getId(), 5);
+        List<BookCardDto> recentlyFinished = bookService.getRecentlyFinishedByUserId(user.getId(), 5);
+        List<BookCardDto> toRead = bookService.getToReadByUserId(user.getId(), 5);
+        List<Review> reviews = bookService.getUserReviews(user.getId(), 5);
         return new ProfileDto(
                 user.getUsername(),
-                user.getImage(),
+                user.getImageUrl(),
+                user.getCreationDate(),
                 currentlyReading,
                 recentlyFinished,
-                readingStats);
+                toRead,
+                readingStats,
+                user.getBadges(),
+                reviews
+        );
     }
 
-    ReadingStats gatherUserStats(Long userId) {
+    private ReadingStats gatherUserStats(User user) {
+        Level level = Level.getUserLevel(user);
+
         return new ReadingStats(
-                bookRepository.findNumberOfFinishedBooksByUserId(userId),
-                bookRepository.findFinishedPagesByUserId(userId)
+                level.level(),
+                level.progression(),
+                bookService.getNumberOfFinishedBooks(user.getId()),
+                bookService.getNumberOfFinishedPages(user.getId()),
+                getUserAverageTimePerWeek(user.getId())
         );
+    }
+
+    private Integer getUserAverageTimePerWeek(Long userId) {
+        return 0; //TODO
     }
 }

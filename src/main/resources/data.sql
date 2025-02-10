@@ -58,11 +58,11 @@ VALUES
     ('alice_brown', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'alice.brown@email.com', '2024-04-01', false),
     ('sam_jones', '$2a$10$84ULGNo2OuOkSxjjlRbntOeKwVcVCpLOql7ntXadkhdstPVP4D66a', 'sam.jones@email.com', '2024-04-15', true);
 
-INSERT INTO book_possession (rating, state, book_id, user_id)
+INSERT INTO book_possession ( state, book_id, user_id)
 VALUES
-    (5,'IN_PROGRESS', 1, 5),
-    (5,'FINISHED', 13, 5),
-    (5,'FINISHED', 24, 5),
-    (5,'FINISHED', 1, 3),
-    (5,'FINISHED', 43, 5),
-    (5,'IN_PROGRESS', 3, 4);
+    ('IN_PROGRESS', 1, 5),
+    ('FINISHED', 13, 5),
+    ('FINISHED', 24, 5),
+    ('FINISHED', 1, 3),
+    ('FINISHED', 43, 5),
+    ('IN_PROGRESS', 3, 4);
