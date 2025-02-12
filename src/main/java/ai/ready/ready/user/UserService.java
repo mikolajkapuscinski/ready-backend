@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -42,9 +41,9 @@ public class UserService {
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
         ReadingStats readingStats = gatherUserStats(user);
-        List<BookCardDto> currentlyReading = bookService.getCurrentlyReadingByUserId(user.getId(), 5);
-        List<BookCardDto> recentlyFinished = bookService.getRecentlyFinishedByUserId(user.getId(), 5);
-        List<BookCardDto> toRead = bookService.getToReadByUserId(user.getId(), 5);
+        List<BookCardDto> currentlyReading = bookService.getCurrentlyReadingByUserId(user.getId(), 10);
+        List<BookCardDto> recentlyFinished = bookService.getRecentlyFinishedByUserId(user.getId(), 10);
+        List<BookCardDto> toRead = bookService.getToReadByUserId(user.getId(), 10);
         List<Review> reviews = bookService.getUserReviews(user.getId(), 5);
         return new ProfileDto(
                 user.getUsername(),
