@@ -41,7 +41,10 @@ public class BookService {
 
 
     public Integer getNumberOfFinishedPages(Long userId) {
-        return bookRepository.findFinishedPagesByUserId(userId);
+        Integer numberOfFinishedPages = bookRepository.findFinishedPagesByUserId(userId);
+        if (numberOfFinishedPages == null)
+            return 0;
+        return numberOfFinishedPages;
     }
 
     public List<BookCardDto> getCurrentlyReadingByUserId(Long userId, int limit) {
