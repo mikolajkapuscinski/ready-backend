@@ -10,7 +10,7 @@ public record Level(int level, double progression) {
 
     public static Level getUserLevel(User user) {
         Long expPoints = user.getExpPoints();
-        if (expPoints == null) return new Level(0, 0);
+        if (expPoints == null) return new Level(1, 0);
         int level = 1;
         double progression;
         double previousPromotionThreshold = 0;
