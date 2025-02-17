@@ -1,7 +1,7 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.book.bookPossesion.BookPossession;
-import ai.ready.ready.book.bookPossesion.Review;
+import ai.ready.ready.bookPossesion.BookPossession;
+import ai.ready.ready.bookPossesion.Review;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

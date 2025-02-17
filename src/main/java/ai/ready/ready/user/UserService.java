@@ -1,8 +1,8 @@
 package ai.ready.ready.user;
 
 import ai.ready.ready.book.BookCardDto;
-import ai.ready.ready.book.BookService;
-import ai.ready.ready.book.bookPossesion.Review;
+import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.bookPossesion.Review;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
@@ -21,7 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final BookService bookService;
+    private final BookPossessionService bookPossessionService;
 
     public void register(final RegistrationRequest request) {
         User user = User.builder()
@@ -41,10 +41,10 @@ public class UserService {
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername());
         ReadingStats readingStats = gatherUserStats(user);
-        List<BookCardDto> currentlyReading = bookService.getCurrentlyReadingByUserId(user.getId(), 10);
-        List<BookCardDto> recentlyFinished = bookService.getRecentlyFinishedByUserId(user.getId(), 10);
-        List<BookCardDto> toRead = bookService.getToReadByUserId(user.getId(), 10);
-        List<Review> reviews = bookService.getUserReviews(user.getId(), 5);
+        List<BookCardDto> currentlyReading = bookPossessionService.getCurrentlyReadingByUserId(user.getId(), 10);
+        List<BookCardDto> recentlyFinished = bookPossessionService.getRecentlyFinishedByUserId(user.getId(), 10);
+        List<BookCardDto> toRead = bookPossessionService.getToReadByUserId(user.getId(), 10);
+        List<Review> reviews = bookPossessionService.getUserReviews(user.getId(), 5);
         return new ProfileDto(
                 user.getUsername(),
                 user.getImageUrl(),
@@ -64,8 +64,8 @@ public class UserService {
         return new ReadingStats(
                 level.level(),
                 level.progression(),
-                bookService.getNumberOfFinishedBooks(user.getId()),
-                bookService.getNumberOfFinishedPages(user.getId()),
+                bookPossessionService.getNumberOfFinishedBooks(user.getId()),
+                bookPossessionService.getNumberOfFinishedPages(user.getId()),
                 getUserAverageTimePerWeek(user.getId())
         );
     }
@@ -74,3 +74,4 @@ public class UserService {
         return 0; //TODO
     }
 }
+ 
