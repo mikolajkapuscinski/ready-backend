@@ -1,6 +1,6 @@
 package ai.ready.ready.book;
 
-import ai.ready.ready.book.bookPossesion.Review;
+import ai.ready.ready.bookPossesion.Review;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

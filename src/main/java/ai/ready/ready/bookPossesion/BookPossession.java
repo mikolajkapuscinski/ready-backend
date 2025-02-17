@@ -1,4 +1,4 @@
-package ai.ready.ready.book.bookPossesion;
+package ai.ready.ready.bookPossesion;
 
 import ai.ready.ready.book.Book;
 import ai.ready.ready.user.User;

@@ -1,4 +1,4 @@
-package ai.ready.ready.book.bookPossesion;
+package ai.ready.ready.bookPossesion;
 
 public enum BookState {
     NOT_STARTED,
