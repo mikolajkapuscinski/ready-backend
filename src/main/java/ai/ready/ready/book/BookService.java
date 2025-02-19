@@ -1,5 +1,6 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.exceptions.BookNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,20 +12,22 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookCardDtoMapper bookCardDtoMapper;
+    private final BookDTOMapper bookDTOMapper;
 
     public List<BookCardDto> getBooks(String title, String author) {
         if (title == null && author == null)
-            return  bookCardDtoMapper.toBookCardDtoList((List<Book>) bookRepository.findAll());
+            return  bookCardDtoMapper.toBookCardDtos((List<Book>) bookRepository.findAll());
         if (title == null)
-            return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByAuthor(author));
+            return bookCardDtoMapper.toBookCardDtos(bookRepository.findByAuthor(author));
         if (author == null)
-            return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByTitle(title));
+            return bookCardDtoMapper.toBookCardDtos(bookRepository.findByTitle(title));
 
-        return bookCardDtoMapper.toBookCardDtoList(bookRepository.findByTitleAndAuthor(title, author));
+        return bookCardDtoMapper.toBookCardDtos(bookRepository.findByTitleAndAuthor(title, author));
     }
 
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+    public BookDTO getBookById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        return bookDTOMapper.toBookDTO(book);
     }
     public Book createBook(Book book) {
         return bookRepository.save(book);
