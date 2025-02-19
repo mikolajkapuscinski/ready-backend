@@ -1,6 +1,8 @@
 package ai.ready.ready.book;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class BookController {
 
 
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
+        return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
     }
 
     @PostMapping
