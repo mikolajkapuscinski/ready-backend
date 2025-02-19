@@ -1,4 +1,4 @@
-package ai.ready.ready.bookPossesion;
+package ai.ready.ready.bookPossesion.review;
 
 import lombok.Getter;
 

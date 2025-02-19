@@ -1,5 +1,6 @@
-package ai.ready.ready.bookPossesion;
+package ai.ready.ready.bookPossesion.review;
 
+import ai.ready.ready.bookPossesion.BookPossession;
 import jakarta.persistence.*;
 import lombok.Data;
 
