@@ -16,6 +16,5 @@ public class Review {
     private String title;
     private Rating rating;
     private String content;
-    private Integer likes;
     private LocalDateTime createdAt;
 }
