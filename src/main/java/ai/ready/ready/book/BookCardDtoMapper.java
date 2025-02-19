@@ -7,6 +7,6 @@ import java.util.List;
 public interface BookCardDtoMapper {
     BookCardDto toBookCardDto(Book book);
     Book toBook(BookCardDto bookCardDto);
-    List<BookCardDto> toBookCardDtoList(List<Book> books);
-    List<Book> toBookList(List<BookCardDto> bookCardDtos);
+    List<BookCardDto> toBookCardDtos(List<Book> books);
+    List<Book> toBooks(List<BookCardDto> bookCardDtos);
 }
