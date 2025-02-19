@@ -4,6 +4,7 @@ import ai.ready.ready.bookPossesion.BookPossession;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -16,10 +17,12 @@ public class Book {
     private Long id;
     private String title;
     private String author;
-    private String isbn;
+    private String isbn13;
+    private String isbn10;
     private String coverUrl;
+    private String language;
     private Integer numberOfPages;
-
+    private Date dateOfPublication;
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     Set<BookPossession> owners;
 
