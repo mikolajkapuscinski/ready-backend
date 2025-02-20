@@ -63,6 +63,13 @@ VALUES
     ('IN_PROGRESS', 1, 5),
     ('FINISHED', 13, 5),
     ('FINISHED', 24, 5),
+    ('FINISHED', 34, 5),
+    ('FINISHED', 26, 5),
+    ('FINISHED', 49, 5),
+    ('FINISHED', 7, 5),
+    ('FINISHED', 21, 5),
+    ('FINISHED', 18, 5),
+    ('FINISHED', 32, 5),
     ('FINISHED', 1, 3),
     ('FINISHED', 43, 5),
     ('IN_PROGRESS', 3, 4);

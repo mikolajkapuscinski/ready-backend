@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,15 +37,18 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final RestAuthSuccessHandler successHandler;
     private final RestAuthFailureHandler failureHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     public SecurityConfig(UserDetailsService userDetailsService, ObjectMapper objectMapper,
                           RestAuthSuccessHandler successHandler,
                           RestAuthFailureHandler failureHandler,
+                          CustomAuthenticationEntryPoint authenticationEntryPoint,
                           @Value("${jwt.secret}") String secret) {
         this.userDetailsService = userDetailsService;
         this.objectMapper = objectMapper;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
+        this.authenticationEntryPoint = authenticationEntryPoint;
         this.secret = secret;
     }
 
@@ -55,22 +57,20 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .exceptionHandling( c -> c.authenticationEntryPoint(
-                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
-                ))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
                      auth ->{
                          auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.requestMatchers(
-                                 "/v3/**",
-                                 "/swagger-ui/**",
                                  "/register",
                                  "/login"
                                  ).permitAll();
                          auth.anyRequest().authenticated();
                      }
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
                 )
                 .addFilter(jsonAuthFilter())
                 .addFilter(new JwtAuthFilter(authenticationManager(), userDetailsService, secret))
