@@ -2,8 +2,8 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.book.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
-import ai.ready.ready.bookPossesion.review.Review;
 import ai.ready.ready.review.Review;
+import ai.ready.ready.review.ReviewService;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
