@@ -1,6 +1,10 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.review.ReviewDTO;
+import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
+import ai.ready.ready.review.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +16,9 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final BookCardDtoMapper bookCardDtoMapper;
-    private final BookDTOMapper bookDTOMapper;
+    private final ReviewDTOMapper reviewDTOMapper;
+    private final ReviewService reviewService;
+    private final BookPossessionService bookPossessionService;
 
     public List<BookCardDto> getBooks(String title, String author) {
         if (title == null && author == null)
@@ -27,7 +33,29 @@ public class BookService {
 
     public BookDTO getBookById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        return bookDTOMapper.toBookDTO(book);
+        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5));
+        Integer avgRating = reviewService.calculateBookAvgRating(reviews);
+        Integer numberOfToReads = bookPossessionService.getNumberOfUsersToReadBook(book.getId());
+        Integer numberOfCurrentlyReading = bookPossessionService.getNumberOfUsersReadingBook(book.getId());
+        Integer numberOfRead = bookPossessionService.getNumberOfUsersReadBook(book.getId());
+        return new BookDTO(
+            book.getId(),
+            book.getTitle(),
+            book.getAuthor(),
+            book.getIsbn13(),
+            book.getIsbn10(),
+            book.getCoverUrl(),
+            book.getLanguage(),
+            book.getNumberOfPages(),
+            book.getDescription(),
+            book.getDateOfPublication(),
+            reviews,
+            avgRating,
+            numberOfToReads,
+            numberOfCurrentlyReading,
+            numberOfRead
+
+        );
     }
     public Book createBook(Book book) {
         return bookRepository.save(book);

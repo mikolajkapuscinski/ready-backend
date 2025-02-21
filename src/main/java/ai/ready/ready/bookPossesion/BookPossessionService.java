@@ -3,7 +3,6 @@ package ai.ready.ready.bookPossesion;
 import ai.ready.ready.book.BookCardDto;
 import ai.ready.ready.book.BookCardDtoMapper;
 import ai.ready.ready.book.BookRepository;
-import ai.ready.ready.bookPossesion.review.Review;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,17 @@ public class BookPossessionService {
         return bookCardDtoMapper.toBookCardDtos(bookRepository.findToReadBooksByUserId(userId, Limit.unlimited()));
     }
 
-    public List<Review> getUserReviews(Long userId, int limit) {
-        return bookRepository.findReviewsByUserId(userId, Limit.of(limit));
+    public Integer getNumberOfUsersToReadBook(Long bookId) {
+        return bookRepository.findNumberOfUsersToReadBook(bookId);
+    }
+
+    public Integer getNumberOfUsersReadingBook(Long bookId) {
+        return bookRepository.findNumberOfUsersReadingBook(bookId);
+
+    }
+
+    public Integer getNumberOfUsersReadBook(Long bookId) {
+        return bookRepository.findNumberOfUsersReadBook(bookId);
+
     }
 }

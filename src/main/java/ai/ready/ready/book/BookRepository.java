@@ -1,6 +1,5 @@
 package ai.ready.ready.book;
 
-import ai.ready.ready.bookPossesion.review.Review;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,6 +27,12 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     @Query("Select b from Book b join BookPossession bp on bp.book.id = b.id where bp.user.id = :userId and bp.state='NOT_STARTED'")
     List<Book> findToReadBooksByUserId(@Param("userId") Long userId, Limit limit);
 
-    @Query("Select r from Review r join BookPossession bp on bp.review.id = r.id where bp.user.id = :userId")
-    List<Review> findReviewsByUserId(@Param("userId") Long userId, Limit limit);
+    @Query("Select count(b) from Book b join BookPossession bp on bp.book.id = b.id where bp.book.id = :bookId and bp.state='NOT_STARTED'")
+    Integer findNumberOfUsersToReadBook(@Param("bookId") Long bookId);
+
+    @Query("Select count(b) from Book b join BookPossession bp on bp.book.id = b.id where bp.book.id = :bookId and bp.state='IN_PROGRESS'")
+    Integer findNumberOfUsersReadingBook(@Param("bookId") Long bookId);
+
+    @Query("Select count(b) from Book b join BookPossession bp on bp.book.id = b.id where bp.book.id = :bookId and bp.state='FINISHED'")
+    Integer findNumberOfUsersReadBook(@Param("bookId") Long bookId);
 }

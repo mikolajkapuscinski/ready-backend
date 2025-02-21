@@ -23,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final BookPossessionService bookPossessionService;
+    private final ReviewService reviewService;
 
     public void register(final RegistrationRequest request) {
         User user = User.builder()
@@ -45,7 +46,7 @@ public class UserService {
         List<BookCardDto> currentlyReading = bookPossessionService.getCurrentlyReadingByUserId(user.getId(), 10);
         List<BookCardDto> recentlyFinished = bookPossessionService.getRecentlyFinishedByUserId(user.getId(), 10);
         List<BookCardDto> toRead = bookPossessionService.getToReadByUserId(user.getId(), 10);
-        List<Review> reviews = bookPossessionService.getUserReviews(user.getId(), 5);
+        List<Review> reviews = reviewService.getUserReviews(user.getId(), 5);
         return new ProfileDto(
                 user.getUsername(),
                 user.getImageUrl(),
