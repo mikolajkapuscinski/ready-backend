@@ -23,6 +23,7 @@ public class Book {
     private String language;
     private Integer numberOfPages;
     private Date dateOfPublication;
+    String description;
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     Set<BookPossession> owners;
 

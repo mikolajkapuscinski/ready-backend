@@ -1,6 +1,6 @@
 package ai.ready.ready.book;
 
-import ai.ready.ready.bookPossesion.review.ReviewDTO;
+import ai.ready.ready.review.ReviewDTO;
 
 import java.util.Date;
 import java.util.List;
