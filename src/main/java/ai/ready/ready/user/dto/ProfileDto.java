@@ -1,7 +1,7 @@
 package ai.ready.ready.user.dto;
 
 import ai.ready.ready.book.BookCardDto;
-import ai.ready.ready.bookPossesion.review.Review;
+import ai.ready.ready.review.Review;
 import ai.ready.ready.user.Badge;
 
 import java.util.Date;

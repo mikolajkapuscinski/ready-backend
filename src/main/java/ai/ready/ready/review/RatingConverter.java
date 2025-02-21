@@ -1,4 +1,4 @@
-package ai.ready.ready.bookPossesion.review;
+package ai.ready.ready.review;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
