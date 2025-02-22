@@ -2,13 +2,16 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.book.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.bookPossesion.UpdateBookPossessionRequest;
+import ai.ready.ready.exceptions.BookNotFoundException;
+import ai.ready.ready.exceptions.UnknownBookStatus;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.user.dto.ProfileDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,19 +33,37 @@ public class UserController {
         return userService.getProfile(userDetails);
     }
 
-    @GetMapping("/me/currently_reading")
-    public List<BookCardDto> getCurrentlyReading(@AuthenticationPrincipal UserDetailsModel userDetails) {
-        return bookPossessionService.getCurrentlyReadingByUserId(userDetails.getId());
+    @GetMapping("/me/books")
+    public List<BookCardDto> getUsersBook(@AuthenticationPrincipal UserDetailsModel userDetails, @RequestParam(required = false) String status) throws UnknownBookStatus {
+        return switch (status) {
+            case null -> bookPossessionService.getUsersBook(userDetails.getId());
+            case "to_read" -> bookPossessionService.getToReadByUserId(userDetails.getId());
+            case "currently_reading" -> bookPossessionService.getCurrentlyReadingByUserId(userDetails.getId());
+            case "finished" -> bookPossessionService.getRecentlyFinishedByUserId(userDetails.getId());
+            default -> throw new UnknownBookStatus(status);
+        };
     }
 
-    @GetMapping("/me/recently_finished")
-    public List<BookCardDto> getRecentlyFinished(@AuthenticationPrincipal UserDetailsModel userDetails) {
-        return bookPossessionService.getRecentlyFinishedByUserId(userDetails.getId());
+    @PutMapping("/me/books/{bookId}")
+    public ResponseEntity updateBookDetails(
+            @AuthenticationPrincipal UserDetailsModel userDetails,
+            @PathVariable Long bookId,
+            @RequestBody UpdateBookPossessionRequest request
+    ) throws UnknownBookStatus, BookNotFoundException {
+            bookPossessionService.updateBookPossession(
+                userDetails.getId(),
+                bookId,
+                request
+            );
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/me/to_read")
-    public List<BookCardDto> getToRead(@AuthenticationPrincipal UserDetailsModel userDetails) {
-        return bookPossessionService.getToReadByUserId(userDetails.getId());
+    @DeleteMapping("/me/books/{bookId}")
+    public ResponseEntity deleteBookDetails(
+            @AuthenticationPrincipal UserDetailsModel userDetailsModel,
+            @PathVariable Long bookId
+    ){
+        bookPossessionService.deleteBookPossession(userDetailsModel.getId(), bookId);
+        return new ResponseEntity( HttpStatus.ACCEPTED);
     }
-
 }
