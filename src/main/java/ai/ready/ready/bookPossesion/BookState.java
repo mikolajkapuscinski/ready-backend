@@ -1,7 +1,7 @@
 package ai.ready.ready.bookPossesion;
 
 public enum BookState {
-    NOT_STARTED,
+    TO_READ,
     IN_PROGRESS,
     FINISHED
 }
