@@ -1,5 +1,7 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.bookPossesion.BookPossessionDTO;
+import ai.ready.ready.bookPossesion.BookPossessionDTOMapper;
 import ai.ready.ready.bookPossesion.BookPossessionService;
 import ai.ready.ready.review.ReviewDTO;
 import ai.ready.ready.review.ReviewDTOMapper;
@@ -19,6 +21,7 @@ public class BookService {
     private final ReviewDTOMapper reviewDTOMapper;
     private final ReviewService reviewService;
     private final BookPossessionService bookPossessionService;
+    private final BookPossessionDTOMapper bookPossessionDTOMapper;
 
     public List<BookCardDto> getBooks(String title, String author) {
         if (title == null && author == null)
@@ -31,13 +34,14 @@ public class BookService {
         return bookCardDtoMapper.toBookCardDtos(bookRepository.findByTitleAndAuthor(title, author));
     }
 
-    public BookDTO getBookById(Long id) {
+    public BookDTO getBookById(Long id, Long userId) {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5));
         Integer avgRating = reviewService.calculateBookAvgRating(reviews);
         Integer numberOfToReads = bookPossessionService.getNumberOfUsersToReadBook(book.getId());
         Integer numberOfCurrentlyReading = bookPossessionService.getNumberOfUsersReadingBook(book.getId());
         Integer numberOfRead = bookPossessionService.getNumberOfUsersReadBook(book.getId());
+        BookPossessionDTO bookPossession = bookPossessionDTOMapper.toDTO(bookPossessionService.getBookPossession(book.getId(), userId));
         return new BookDTO(
             book.getId(),
             book.getTitle(),
@@ -53,8 +57,8 @@ public class BookService {
             avgRating,
             numberOfToReads,
             numberOfCurrentlyReading,
-            numberOfRead
-
+            numberOfRead,
+            bookPossession
         );
     }
     public Book createBook(Book book) {

@@ -23,6 +23,10 @@ public class BookPossessionService {
     private final BookCardDtoMapper bookCardDtoMapper;
     private final UserRepository userRepository;
 
+    public BookPossession getBookPossession(Long bookId, Long userId) {
+        return bookPossessionRepository.findByBookIdAndUserId(bookId, userId).orElseThrow(BookNotFoundException::new);
+    }
+
     public Integer getNumberOfFinishedBooks(Long userId) {
         return bookPossessionRepository.countAllByUserIdAndState(userId, FINISHED);
     }
@@ -121,7 +125,6 @@ public class BookPossessionService {
         bookPossession.setFinishDate(null);
         bookPossessionRepository.save(bookPossession);
     }
-
 
     public void deleteBookPossession(Long userId, Long bookId) {
         bookPossessionRepository.deleteAllByBookIdAndUserId(bookId, userId);

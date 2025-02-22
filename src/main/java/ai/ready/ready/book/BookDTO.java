@@ -1,5 +1,6 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.bookPossesion.BookPossessionDTO;
 import ai.ready.ready.review.ReviewDTO;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public record BookDTO(
         Integer avgRating,
         Integer numberOfToReads,
         Integer numberOfCurrentlyReading,
-        Integer numberOfRead
+        Integer numberOfRead,
+        BookPossessionDTO bookPossession
 ) {
 }

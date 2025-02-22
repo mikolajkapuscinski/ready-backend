@@ -1,8 +1,10 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class BookController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBook(@PathVariable Long id) {
-        return new ResponseEntity<>(bookService.getBookById(id), HttpStatus.OK);
+    public ResponseEntity<BookDTO> getBook(@PathVariable Long id, @AuthenticationPrincipal UserDetailsModel user) {
+        return new ResponseEntity<>(bookService.getBookById(id, user.getId()), HttpStatus.OK);
     }
 
     @PostMapping
