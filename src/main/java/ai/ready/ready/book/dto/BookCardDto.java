@@ -1,4 +1,4 @@
-package ai.ready.ready.book;
+package ai.ready.ready.book.dto;
 
 public record BookCardDto(
     Long id,

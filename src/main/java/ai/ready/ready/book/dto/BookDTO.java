@@ -1,4 +1,4 @@
-package ai.ready.ready.book;
+package ai.ready.ready.book.dto;
 
 import ai.ready.ready.bookPossesion.BookPossessionDTO;
 import ai.ready.ready.review.ReviewDTO;

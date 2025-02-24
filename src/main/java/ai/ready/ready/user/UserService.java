@@ -1,6 +1,6 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.book.BookCardDto;
+import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
 import ai.ready.ready.review.Review;
 import ai.ready.ready.review.ReviewService;

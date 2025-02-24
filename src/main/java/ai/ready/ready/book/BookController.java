@@ -1,5 +1,8 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.book.dto.BookCardDto;
+import ai.ready.ready.book.dto.BookDTO;
+import ai.ready.ready.book.dto.SearchRequest;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

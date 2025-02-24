@@ -1,6 +1,8 @@
 package ai.ready.ready.bookPossesion;
 
 import ai.ready.ready.book.*;
+import ai.ready.ready.book.dto.BookCardDto;
+import ai.ready.ready.book.dto.BookCardDtoMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.exceptions.UnknownBookStatus;
 import ai.ready.ready.exceptions.UserNotFoundException;

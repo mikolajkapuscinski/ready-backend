@@ -1,4 +1,5 @@
-package ai.ready.ready.book;
+package ai.ready.ready.book.dto;
+import ai.ready.ready.book.Book;
 import org.mapstruct.Mapper;
 
 import java.util.List;

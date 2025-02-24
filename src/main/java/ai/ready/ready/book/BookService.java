@@ -1,5 +1,9 @@
 package ai.ready.ready.book;
 
+import ai.ready.ready.book.dto.BookCardDto;
+import ai.ready.ready.book.dto.BookCardDtoMapper;
+import ai.ready.ready.book.dto.BookDTO;
+import ai.ready.ready.book.dto.SearchRequest;
 import ai.ready.ready.bookPossesion.BookPossessionDTO;
 import ai.ready.ready.bookPossesion.BookPossessionDTOMapper;
 import ai.ready.ready.bookPossesion.BookPossessionService;
