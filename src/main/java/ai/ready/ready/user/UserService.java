@@ -2,12 +2,14 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.review.Review;
 import ai.ready.ready.review.ReviewService;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.ReadingStats;
+import ai.ready.ready.user.dto.UpdateProfileRequest;
 import ai.ready.ready.user.expPoints.Level;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +58,8 @@ public class UserService {
                 toRead,
                 readingStats,
                 user.getBadges(),
-                reviews
+                reviews,
+                user.getAboutMe()
         );
     }
 
@@ -74,6 +77,14 @@ public class UserService {
 
     private Integer getUserAverageTimePerWeek(Long userId) {
         return 0; //TODO
+    }
+
+    public void updateProfile(UserDetailsModel userDetails, UpdateProfileRequest updateProfileRequest) {
+        User user = userRepository.findById(userDetails.getId()).orElseThrow(UserNotFoundException::new);
+        user.setUsername(updateProfileRequest.username());
+        user.setAboutMe(updateProfileRequest.aboutMe());
+        user.setImageUrl(updateProfileRequest.imageUrl());
+        userRepository.save(user);
     }
 }
  

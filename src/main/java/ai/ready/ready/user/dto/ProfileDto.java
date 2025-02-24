@@ -16,5 +16,6 @@ public record ProfileDto (
         List<BookCardDto> toRead,
         ReadingStats readingStats,
         List<Badge> badges,
-        List<Review> reviews
+        List<Review> reviews,
+        String aboutMe
 ){}

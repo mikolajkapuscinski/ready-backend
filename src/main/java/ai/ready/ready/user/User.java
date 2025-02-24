@@ -42,5 +42,5 @@ public class User {
     private List<Badge> badges;
     @OneToMany
     private List<Review> review;
-
+    private String aboutMe;
 }
