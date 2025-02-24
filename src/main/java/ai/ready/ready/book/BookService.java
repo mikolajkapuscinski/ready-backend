@@ -12,6 +12,9 @@ import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.review.ReviewService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,15 +30,19 @@ public class BookService {
     private final BookPossessionService bookPossessionService;
     private final BookPossessionDTOMapper bookPossessionDTOMapper;
 
-    public List<BookCardDto> getBooks(String title, String author) {
-        if (title == null && author == null)
-            return  bookCardDtoMapper.toBookCardDtos((List<Book>) bookRepository.findAll());
-        if (title == null)
-            return bookCardDtoMapper.toBookCardDtos(bookRepository.findByAuthor(author));
-        if (author == null)
-            return bookCardDtoMapper.toBookCardDtos(bookRepository.findByTitle(title));
+    public Page<BookCardDto> getBooks(SearchRequest searchCriteria, Pageable pageable) {
+        if (searchCriteria == null) {
+            return bookRepository.findAll(pageable).map(bookCardDtoMapper::toBookCardDto);
+        }
+        Specification<Book> spec = Specification.where(null);
+        spec = switch (searchCriteria.category()) {
+            case "title" -> spec.and(BookSpecs.containsTitle(searchCriteria.value()));
+            case "author" -> spec.and(BookSpecs.containsAuthor(searchCriteria.value()));
+            case "isbn" -> spec.and(BookSpecs.containsIsbn(searchCriteria.value()));
+            default -> spec.and(BookSpecs.containsIsbn(searchCriteria.value()).or(BookSpecs.containsTitle(searchCriteria.value()).or(BookSpecs.containsAuthor(searchCriteria.value()))));
+        };
 
-        return bookCardDtoMapper.toBookCardDtos(bookRepository.findByTitleAndAuthor(title, author));
+        return bookRepository.findAll(spec, pageable).map(bookCardDtoMapper::toBookCardDto);
     }
 
     public BookDTO getBookById(Long id, Long userId) {

@@ -5,12 +5,13 @@ import ai.ready.ready.book.dto.BookDTO;
 import ai.ready.ready.book.dto.SearchRequest;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -20,11 +21,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookCardDto> getBooks(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String author
-    ) {
-        return bookService.getBooks(title, author);
+    public ResponseEntity<Page<BookCardDto>> getBooks(@RequestBody(required = false) SearchRequest searchCriteria, Pageable pageable) {
+        return new ResponseEntity<>(bookService.getBooks(searchCriteria, pageable), HttpStatus.OK);
     }
 
 
