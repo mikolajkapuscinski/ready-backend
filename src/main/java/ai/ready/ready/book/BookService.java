@@ -1,12 +1,10 @@
 package ai.ready.ready.book;
 
-import ai.ready.ready.book.dto.BookCardDto;
-import ai.ready.ready.book.dto.BookCardDtoMapper;
-import ai.ready.ready.book.dto.BookDTO;
-import ai.ready.ready.book.dto.SearchRequest;
+import ai.ready.ready.book.dto.*;
 import ai.ready.ready.bookPossesion.BookPossessionDTO;
 import ai.ready.ready.bookPossesion.BookPossessionDTOMapper;
 import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.exceptions.BookAlreadyExistException;
 import ai.ready.ready.review.ReviewDTO;
 import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
@@ -72,8 +70,23 @@ public class BookService {
             bookPossession
         );
     }
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public Book createBook(BookCreationRequest book) {
+        if(!bookRepository.findAll(BookSpecs.containsIsbn(book.isbn13())).isEmpty()) {
+            throw new BookAlreadyExistException(book.title());
+        }
+        Book b = Book.builder()
+                .title(book.title())
+                .author(book.author())
+                .isbn13(book.isbn13())
+                .isbn10(book.isbn10())
+                .coverUrl(book.coverURL())
+                .language(book.language())
+                .numberOfPages(book.numberOfPages())
+                .description(book.description())
+                .dateOfPublication(book.dateOfPublication())
+                .build();
+
+        return bookRepository.save(b);
     }
     public void deleteById(Long id) {
         bookRepository.deleteById(id);

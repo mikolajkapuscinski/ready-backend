@@ -1,6 +1,7 @@
 package ai.ready.ready.book;
 
 import ai.ready.ready.book.dto.BookCardDto;
+import ai.ready.ready.book.dto.BookCreationRequest;
 import ai.ready.ready.book.dto.BookDTO;
 import ai.ready.ready.book.dto.SearchRequest;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
@@ -32,7 +33,7 @@ public class BookController {
     }
 
     @PostMapping
-    public Book addBook(@RequestBody Book book) {
+    public Book addBook(@RequestBody BookCreationRequest book) {
         return bookService.createBook(book);
     }
 
