@@ -14,8 +14,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UnknownBookStatus.class)
-    public ResponseEntity<String> unknownBookStatus(final UnknownBookStatus e) {
+    @ExceptionHandler(UnknownBookStatusException.class)
+    public ResponseEntity<String> unknownBookStatus(final UnknownBookStatusException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

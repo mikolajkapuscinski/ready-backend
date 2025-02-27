@@ -4,7 +4,7 @@ import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
 import ai.ready.ready.bookPossesion.UpdateBookPossessionRequest;
 import ai.ready.ready.exceptions.BookNotFoundException;
-import ai.ready.ready.exceptions.UnknownBookStatus;
+import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.UpdateProfileRequest;
@@ -41,13 +41,13 @@ public class UserController {
     }
 
     @GetMapping("/me/books")
-    public List<BookCardDto> getUsersBook(@AuthenticationPrincipal UserDetailsModel userDetails, @RequestParam(required = false) String status) throws UnknownBookStatus {
+    public List<BookCardDto> getUsersBook(@AuthenticationPrincipal UserDetailsModel userDetails, @RequestParam(required = false) String status) throws UnknownBookStatusException {
         return switch (status) {
             case null -> bookPossessionService.getUsersBook(userDetails.getId());
             case "to_read" -> bookPossessionService.getToReadByUserId(userDetails.getId());
             case "currently_reading" -> bookPossessionService.getCurrentlyReadingByUserId(userDetails.getId());
             case "finished" -> bookPossessionService.getRecentlyFinishedByUserId(userDetails.getId());
-            default -> throw new UnknownBookStatus(status);
+            default -> throw new UnknownBookStatusException(status);
         };
     }
 
@@ -56,7 +56,7 @@ public class UserController {
             @AuthenticationPrincipal UserDetailsModel userDetails,
             @PathVariable Long bookId,
             @RequestBody UpdateBookPossessionRequest request
-    ) throws UnknownBookStatus, BookNotFoundException {
+    ) throws UnknownBookStatusException, BookNotFoundException {
             bookPossessionService.updateBookPossession(
                 userDetails.getId(),
                 bookId,

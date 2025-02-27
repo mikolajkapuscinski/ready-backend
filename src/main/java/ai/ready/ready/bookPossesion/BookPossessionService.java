@@ -4,7 +4,7 @@ import ai.ready.ready.book.*;
 import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.book.dto.BookCardDtoMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
-import ai.ready.ready.exceptions.UnknownBookStatus;
+import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;
@@ -81,14 +81,14 @@ public class BookPossessionService {
         return bookPossessionRepository.countAllByBookIdAndState(bookId, FINISHED);
     }
 
-    public void updateBookPossession(Long userId, Long bookId, UpdateBookPossessionRequest request) throws UnknownBookStatus {
+    public void updateBookPossession(Long userId, Long bookId, UpdateBookPossessionRequest request) throws UnknownBookStatusException {
         Book book = bookRepository.findById(bookId).orElseThrow(BookNotFoundException::new);
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         switch (request.getBookState()) {
             case TO_READ -> addBookToToRead(user, book);
             case IN_PROGRESS -> addBookToInProgress(user, book, request.getCurrentPage());
             case FINISHED -> addBookToFinished(user, book);
-            default -> throw new UnknownBookStatus(request.getBookState().toString());
+            default -> throw new UnknownBookStatusException(request.getBookState().toString());
         }
     }
 
