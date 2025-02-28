@@ -17,7 +17,7 @@ public class AIController {
     private final AIService aiService;
 
     @PostMapping("/find-book")
-    ResponseEntity<String> findBook(@RequestParam("image") MultipartFile image) {
+    ResponseEntity<FindBookResponseFormat> findBook(@RequestParam("image") MultipartFile image) {
         if(image.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
