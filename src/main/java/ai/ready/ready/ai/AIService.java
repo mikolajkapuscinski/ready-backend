@@ -22,13 +22,13 @@ public class AIService {
 
     private final OpenAiChatModel openAiChatModel;
 
-    public String findBook(MultipartFile image) {
+    public FindBookResponseFormat findBook(MultipartFile image) {
 
         var outputConverter = new BeanOutputConverter<>(FindBookResponseFormat.class);
 
         var jsonSchema = outputConverter.getJsonSchema();
 
-        var userMessage = new UserMessage(FIND_BOOK_SYSTEM_MESSAGE,new Media(MimeTypeUtils.IMAGE_PNG, image.getResource()));
+        var userMessage = new UserMessage(FIND_BOOK_SYSTEM_MESSAGE,new Media(MimeTypeUtils.IMAGE_JPEG, image.getResource()));
 
         Prompt prompt = new Prompt(userMessage,
                 OpenAiChatOptions.builder()
@@ -38,9 +38,8 @@ public class AIService {
                 );
 
         ChatResponse response = openAiChatModel.call(prompt);
-
         String content = response.getResult().getOutput().getText();
 
-        return content;
+        return outputConverter.convert(content);
     }
 }
