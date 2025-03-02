@@ -51,8 +51,7 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
                 .filter((c) -> c.getName().equals(COOKIE_NAME))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("Token not found") {
-                });
+                .orElse(null);
         if (token != null) {
             String username = JWT.require(Algorithm.HMAC512(secret))
                     .build()
