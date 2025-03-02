@@ -43,7 +43,7 @@ public class UserService {
     }
 
     public ProfileDto getProfile(UserDetailsModel userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername());
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
         ReadingStats readingStats = gatherUserStats(user);
         List<BookCardDto> currentlyReading = bookPossessionService.getCurrentlyReadingByUserId(user.getId(), 10);
         List<BookCardDto> recentlyFinished = bookPossessionService.getRecentlyFinishedByUserId(user.getId(), 10);
