@@ -1,4 +1,4 @@
-package ai.ready.ready.security;
+package ai.ready.ready.security.authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
