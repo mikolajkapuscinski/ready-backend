@@ -1,11 +1,9 @@
 package ai.ready.ready.security;
 
-import ai.ready.ready.security.authentication.JsonAuthFilter;
-import ai.ready.ready.security.authentication.JwtAuthFilter;
-import ai.ready.ready.security.authentication.RestAuthFailureHandler;
-import ai.ready.ready.security.authentication.RestAuthSuccessHandler;
+import ai.ready.ready.security.authentication.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.DispatcherType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +29,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -38,21 +37,10 @@ public class SecurityConfig {
     private final RestAuthSuccessHandler successHandler;
     private final RestAuthFailureHandler failureHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomOidcUserService oidcUserService;
 
-    public SecurityConfig(UserDetailsService userDetailsService, ObjectMapper objectMapper,
-                          RestAuthSuccessHandler successHandler,
-                          RestAuthFailureHandler failureHandler,
-                          CustomAuthenticationEntryPoint authenticationEntryPoint,
-                          @Value("${jwt.secret}") String secret) {
-        this.userDetailsService = userDetailsService;
-        this.objectMapper = objectMapper;
-        this.successHandler = successHandler;
-        this.failureHandler = failureHandler;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.secret = secret;
-    }
-
-    private final String secret;
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,13 +52,19 @@ public class SecurityConfig {
                          auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.requestMatchers(
                                  "/register",
-                                 "/login"
+                                 "/login",
+                                 "/login/oauth2"
                                  ).permitAll();
                          auth.anyRequest().authenticated();
                      }
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(authenticationEntryPoint)
+                )
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .oidcUserService(oidcUserService))
+                        .successHandler(successHandler)
                 )
                 .addFilter(jsonAuthFilter())
                 .addFilter(new JwtAuthFilter(authenticationManager(), userDetailsService, secret))
@@ -83,7 +77,7 @@ public class SecurityConfig {
                 .build();
     }
 
-    public JsonAuthFilter jsonAuthFilter() {
+    private JsonAuthFilter jsonAuthFilter() {
         JsonAuthFilter filter = new JsonAuthFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(successHandler);
@@ -91,11 +85,11 @@ public class SecurityConfig {
         return filter;
     }
 
-    public AuthenticationManager authenticationManager(){
+    private AuthenticationManager authenticationManager(){
         return new ProviderManager(authProvider());
     }
 
-    public AuthenticationProvider authProvider() {
+    private AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
@@ -111,8 +105,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST"));
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Cookie"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
