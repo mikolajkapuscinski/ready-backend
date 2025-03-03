@@ -34,24 +34,24 @@ public class RestAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String email;
+        boolean isOidc = false;
+
         if(authentication.getPrincipal() instanceof UserDetailsModel) {
             email = ((UserDetailsModel) authentication.getPrincipal()).getUsername();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"message\": \"Login successful\", \"redirectUrl\": \"http://localhost:5173/#/\"}");
-            response.getWriter().flush();
         }
         else if(authentication.getPrincipal() instanceof DefaultOidcUser) {
             email = ((DefaultOidcUser) authentication.getPrincipal()).getEmail();
-            response.sendRedirect("http://localhost:5173/#/");
+            isOidc = true;
         }
         else {
             return;
         }
+
         String token = JWT.create()
                 .withSubject(email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC512(secret));
+
         ResponseCookie jwtCookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
                 .secure(true)
@@ -60,5 +60,14 @@ public class RestAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
                 .maxAge(Duration.ofDays(1))
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+
+        if(isOidc) {
+            response.sendRedirect("http://localhost:5173/#/");
+        } else {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"message\": \"Login successful\", \"redirectUrl\": \"http://localhost:5173/#/\"}");
+            response.getWriter().flush();
+        }
     }
 }
