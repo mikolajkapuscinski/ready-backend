@@ -21,7 +21,7 @@ public class CustomOidcUserService extends OidcUserService {
 
         Oauth2UserInfoDto userInfoDto = Oauth2UserInfoDto.builder()
                 .email(oidcUser.getEmail())
-                .name(oidcUser.getName())
+                .name(oidcUser.getFullName())
                 .picture(oidcUser.getPicture())
                 .build();
 
