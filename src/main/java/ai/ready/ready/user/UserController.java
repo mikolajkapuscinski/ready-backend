@@ -22,7 +22,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final BookPossessionService bookPossessionService;
 
     @GetMapping
     public List<User> getUsers() {
@@ -40,37 +39,4 @@ public class UserController {
         return new ResponseEntity( HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/me/books")
-    public List<BookCardDto> getUsersBook(@AuthenticationPrincipal UserDetailsModel userDetails, @RequestParam(required = false) String status) throws UnknownBookStatusException {
-        return switch (status) {
-            case null -> bookPossessionService.getUsersBook(userDetails.getId());
-            case "to_read" -> bookPossessionService.getToReadByUserId(userDetails.getId());
-            case "currently_reading" -> bookPossessionService.getCurrentlyReadingByUserId(userDetails.getId());
-            case "finished" -> bookPossessionService.getRecentlyFinishedByUserId(userDetails.getId());
-            default -> throw new UnknownBookStatusException(status);
-        };
-    }
-
-    @PutMapping("/me/books/{bookId}")
-    public ResponseEntity updateBookDetails(
-            @AuthenticationPrincipal UserDetailsModel userDetails,
-            @PathVariable Long bookId,
-            @RequestBody UpdateBookPossessionRequest request
-    ) throws UnknownBookStatusException, BookNotFoundException {
-            bookPossessionService.updateBookPossession(
-                userDetails.getId(),
-                bookId,
-                request
-            );
-        return new ResponseEntity(HttpStatus.ACCEPTED);
-    }
-
-    @DeleteMapping("/me/books/{bookId}")
-    public ResponseEntity deleteBookDetails(
-            @AuthenticationPrincipal UserDetailsModel userDetailsModel,
-            @PathVariable Long bookId
-    ){
-        bookPossessionService.deleteBookPossession(userDetailsModel.getId(), bookId);
-        return new ResponseEntity( HttpStatus.ACCEPTED);
-    }
 }
