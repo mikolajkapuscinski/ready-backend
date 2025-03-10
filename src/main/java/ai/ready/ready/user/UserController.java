@@ -1,10 +1,5 @@
 package ai.ready.ready.user;
 
-import ai.ready.ready.book.dto.BookCardDto;
-import ai.ready.ready.bookPossesion.BookPossessionService;
-import ai.ready.ready.bookPossesion.UpdateBookPossessionRequest;
-import ai.ready.ready.exceptions.BookNotFoundException;
-import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.UpdateProfileRequest;
