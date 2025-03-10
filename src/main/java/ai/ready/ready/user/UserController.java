@@ -4,7 +4,6 @@ import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.UpdateProfileRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +28,9 @@ public class UserController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity updateProfile(@AuthenticationPrincipal UserDetailsModel userDetails, UpdateProfileRequest updateProfileRequest){
-        userService.updateProfile(userDetails, updateProfileRequest);
-        return new ResponseEntity( HttpStatus.ACCEPTED);
+    public ResponseEntity<ProfileDto> updateProfile(@AuthenticationPrincipal UserDetailsModel userDetails, UpdateProfileRequest updateProfileRequest){
+        ProfileDto updatedProfile = userService.updateProfile(userDetails, updateProfileRequest);
+        return ResponseEntity.accepted().body(updatedProfile);
     }
 
 }

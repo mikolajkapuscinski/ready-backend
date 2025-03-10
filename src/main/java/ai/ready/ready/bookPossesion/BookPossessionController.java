@@ -31,25 +31,25 @@ public class BookPossessionController {
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity updateBookDetails(
+    public ResponseEntity<BookPossessionDTO> updateBookPossession(
             @AuthenticationPrincipal UserDetailsModel userDetails,
             @PathVariable Long bookId,
             @RequestBody UpdateBookPossessionRequest request
     ) throws UnknownBookStatusException, BookNotFoundException {
-        bookPossessionService.updateBookPossession(
+        BookPossessionDTO bp = bookPossessionService.updateBookPossession(
                 userDetails.getId(),
                 bookId,
                 request
         );
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return ResponseEntity.accepted().body(bp);
     }
 
     @DeleteMapping("/{bookId}")
-    public ResponseEntity deleteBookDetails(
+    public ResponseEntity<BookPossessionDTO> deleteBookPossession(
             @AuthenticationPrincipal UserDetailsModel userDetailsModel,
             @PathVariable Long bookId
     ){
-        bookPossessionService.deleteBookPossession(userDetailsModel.getId(), bookId);
-        return new ResponseEntity( HttpStatus.ACCEPTED);
+       BookPossessionDTO bp = bookPossessionService.deleteBookPossession(userDetailsModel.getId(), bookId);
+        return ResponseEntity.accepted().body(bp);
     }
 }

@@ -8,6 +8,7 @@ import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;
+import ai.ready.ready.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class BookPossessionService {
     private final BookRepository bookRepository;
     private final BookPossessionRepository bookPossessionRepository;
     private final BookCardDtoMapper bookCardDtoMapper;
+    private final BookPossessionDTOMapper bookPossessionDTOMapper;
     private final UserRepository userRepository;
 
     public BookPossession getBookPossession(Long bookId, Long userId) {
@@ -81,7 +83,7 @@ public class BookPossessionService {
         return bookPossessionRepository.countAllByBookIdAndState(bookId, FINISHED);
     }
 
-    public void updateBookPossession(Long userId, Long bookId, UpdateBookPossessionRequest request) throws UnknownBookStatusException {
+    public BookPossessionDTO updateBookPossession(Long userId, Long bookId, UpdateBookPossessionRequest request) throws UnknownBookStatusException {
         Book book = bookRepository.findById(bookId).orElseThrow(BookNotFoundException::new);
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         switch (request.getBookState()) {
@@ -90,6 +92,7 @@ public class BookPossessionService {
             case FINISHED -> addBookToFinished(user, book);
             default -> throw new UnknownBookStatusException(request.getBookState().toString());
         }
+        return bookPossessionDTOMapper.toDTO(getBookPossession(bookId, userId));
     }
 
     private void addBookToFinished(User user, Book book) {
@@ -128,7 +131,8 @@ public class BookPossessionService {
         bookPossessionRepository.save(bookPossession);
     }
 
-    public void deleteBookPossession(Long userId, Long bookId) {
+    public BookPossessionDTO deleteBookPossession(Long userId, Long bookId) {
         bookPossessionRepository.deleteAllByBookIdAndUserId(bookId, userId);
+        return bookPossessionDTOMapper.toDTO(getBookPossession(bookId, userId));
     }
 }

@@ -79,12 +79,13 @@ public class UserService {
         return 0; //TODO
     }
 
-    public void updateProfile(UserDetailsModel userDetails, UpdateProfileRequest updateProfileRequest) {
+    public ProfileDto updateProfile(UserDetailsModel userDetails, UpdateProfileRequest updateProfileRequest) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow(UserNotFoundException::new);
         user.setUsername(updateProfileRequest.username());
         user.setAboutMe(updateProfileRequest.aboutMe());
         user.setImageUrl(updateProfileRequest.imageUrl());
         userRepository.save(user);
+        return getProfile(userDetails);
     }
 }
  
