@@ -1,5 +1,6 @@
 package ai.ready.ready.security.authentication.dto;
 
+import ai.ready.ready.security.authentication.PasswordMatches;
 import ai.ready.ready.security.authentication.ValidEmail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@PasswordMatches
 public class RegistrationRequest {
 
     @NotNull

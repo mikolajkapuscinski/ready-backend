@@ -2,6 +2,7 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.exceptions.UserAlreadyExistException;
 import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.review.Review;
 import ai.ready.ready.review.ReviewService;
@@ -28,6 +29,10 @@ public class UserService {
     private final ReviewService reviewService;
 
     public void register(final RegistrationRequest request) {
+
+        if(userRepository.findByEmail(request.getEmail()).isPresent())
+            throw new UserAlreadyExistException(request.getEmail());
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
