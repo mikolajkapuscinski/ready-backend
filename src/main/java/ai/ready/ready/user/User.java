@@ -2,6 +2,7 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.bookPossesion.BookPossession;
 import ai.ready.ready.review.Review;
+import ai.ready.ready.user.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +33,8 @@ public class User {
     private String email;
     @CreationTimestamp
     private Date creationDate;
-    private boolean active;
-    @OneToMany
+    private boolean enabled = false;
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
     @OneToMany(mappedBy = "user")
     private Set<BookPossession> books;

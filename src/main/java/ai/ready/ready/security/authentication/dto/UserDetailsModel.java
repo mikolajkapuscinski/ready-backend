@@ -15,13 +15,15 @@ public class UserDetailsModel implements UserDetails, GrantedAuthoritiesMapper {
     private final Long id;
     private final String email;
     private final String password;
+    private final boolean enabled;
     private final List<GrantedAuthority> authorities;
 
-    public UserDetailsModel(User user) {
+    public UserDetailsModel(User user, List<GrantedAuthority> authorities) {
         id = user.getId();
         email = user.getEmail();
         password = user.getPassword();
-        authorities = null;
+        enabled = user.isEnabled();
+        this.authorities = authorities;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class UserDetailsModel implements UserDetails, GrantedAuthoritiesMapper {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return enabled;
     }
 
     @Override
