@@ -5,7 +5,6 @@ import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

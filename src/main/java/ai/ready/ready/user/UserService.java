@@ -2,6 +2,7 @@ package ai.ready.ready.user;
 
 import ai.ready.ready.book.dto.BookCardDto;
 import ai.ready.ready.bookPossesion.BookPossessionService;
+import ai.ready.ready.emailVerification.EmailVerificationService;
 import ai.ready.ready.exceptions.UserAlreadyExistException;
 import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.review.Review;
@@ -12,10 +13,12 @@ import ai.ready.ready.user.dto.ProfileDto;
 import ai.ready.ready.user.dto.ReadingStats;
 import ai.ready.ready.user.dto.UpdateProfileRequest;
 import ai.ready.ready.user.expPoints.Level;
+import ai.ready.ready.user.role.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final BookPossessionService bookPossessionService;
     private final ReviewService reviewService;
+    private final RoleRepository roleRepository;
+    private final EmailVerificationService emailVerificationService;
 
     public void register(final RegistrationRequest request) {
 
@@ -38,8 +43,10 @@ public class UserService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .creationDate(new Date())
-                .active(true)
+                .roles(Collections.singletonList(roleRepository.findByName("USER")))
                 .build();
+
+        emailVerificationService.sendVerificationEmail(user);
         userRepository.save(user);
     }
 

@@ -8,7 +8,6 @@ import ai.ready.ready.exceptions.UnknownBookStatusException;
 import ai.ready.ready.exceptions.UserNotFoundException;
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;
-import ai.ready.ready.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
