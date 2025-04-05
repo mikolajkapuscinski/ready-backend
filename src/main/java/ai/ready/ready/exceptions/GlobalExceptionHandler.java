@@ -28,4 +28,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> bookAlreadyExist(final BookAlreadyExistException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<String> userAlreadyExist(final UserAlreadyExistException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }
