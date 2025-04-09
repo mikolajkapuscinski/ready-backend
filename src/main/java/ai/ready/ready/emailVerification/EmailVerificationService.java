@@ -4,7 +4,6 @@ import ai.ready.ready.exceptions.NotValidVerificationToken;
 import ai.ready.ready.exceptions.VerificationTokenExpired;
 import ai.ready.ready.user.User;
 import ai.ready.ready.user.UserRepository;
-import ai.ready.ready.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
