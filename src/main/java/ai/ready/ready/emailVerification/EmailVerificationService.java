@@ -17,10 +17,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EmailVerificationService {
 
-    private final UserService userService;
     private final UserRepository userRepository;
-    private JavaMailSender mailSender;
-
+    private final JavaMailSender mailSender;
     private final VerificationTokenRepository verificationTokenRepository;
 
     public void sendVerificationEmail(User user) {
@@ -40,14 +38,6 @@ public class EmailVerificationService {
     private void createVerificationToken(User user, String token) {
         VerificationToken verificationToken = new VerificationToken(user, token);
         verificationTokenRepository.save(verificationToken);
-    }
-
-    public VerificationToken getVerificationToken(User user) {
-        return verificationTokenRepository.findByUser(user);
-    }
-
-    public User getUserFromVerificationToken(String token) {
-        return verificationTokenRepository.findByToken(token).orElseThrow(NotValidVerificationToken::new).getUser();
     }
 
     public void confirmEmail(String token) {

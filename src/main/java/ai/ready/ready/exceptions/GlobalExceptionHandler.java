@@ -33,4 +33,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> userAlreadyExist(final UserAlreadyExistException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(VerificationTokenExpired.class)
+    public ResponseEntity<String> verificationTokenExpired(final VerificationTokenExpired e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 }
