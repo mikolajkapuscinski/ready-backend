@@ -33,9 +33,9 @@ A comprehensive book tracking application with AI-powered recommendations and co
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ## Infrastructure
 
-AWS S3 - Cloud storage for book covers and user uploads
-Docker - Containerization for development and deployment
-CI/CD Pipeline - Automated testing and deployment
+- AWS S3 - Cloud storage for book covers and user uploads
+- Docker - Containerization for development and deployment
+- CI/CD Pipeline - Automated testing and deployment
 
 ## Key Technical Implementations
 ### AI Recommendation System
