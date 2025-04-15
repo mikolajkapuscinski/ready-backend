@@ -2,12 +2,12 @@
 A comprehensive book tracking application with AI-powered recommendations and cover recognition capabilities. Read-y helps users manage their reading habits, discover new books, and engage with a community of readers.
 
 ## Features
-Reading Habit Tracking: Log and monitor your reading progress, set goals, and track your reading statistics
-Book Discovery: Find new books tailored to your preferences and reading history
-AI-Powered Book Recommendations: Get personalized book suggestions based on your reading history and preferences
-Cover Recognition System: Identify books by simply uploading a photo of the cover
-User Authentication: Secure JWT authentication with Google OAuth2 integration
-Responsive Design: Seamless experience across all devices
+- Reading Habit Tracking: Log and monitor your reading progress, set goals, and track your reading statistics
+- Book Discovery: Find new books tailored to your preferences and reading history
+- AI-Powered Book Recommendations: Get personalized book suggestions based on your reading history and preferences
+- Cover Recognition System: Identify books by simply uploading a photo of the cover
+- User Authentication: Secure JWT authentication with Google OAuth2 integration
+- Responsive Design: Seamless experience across all devices
 
 ## Technology Stack
 ### Backend
