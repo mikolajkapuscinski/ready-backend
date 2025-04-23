@@ -9,11 +9,13 @@ import ai.ready.ready.review.ReviewDTO;
 import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.review.ReviewService;
+import ai.ready.ready.s3.BookCoverService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class BookService {
     private final ReviewService reviewService;
     private final BookPossessionService bookPossessionService;
     private final BookPossessionDTOMapper bookPossessionDTOMapper;
+    private final BookCoverService bookCoverService;
 
     public Page<BookCardDto> getBooks(SearchRequest searchCriteria, Pageable pageable) {
         if (searchCriteria == null) {
@@ -56,7 +59,6 @@ public class BookService {
             book.getTitle(),
             book.getAuthor(),
             book.getIsbn13(),
-            book.getIsbn10(),
             book.getCoverUrl(),
             book.getLanguage(),
             book.getNumberOfPages(),
@@ -70,20 +72,20 @@ public class BookService {
             bookPossession
         );
     }
-    public Book createBook(BookCreationRequest book) {
-        if(!bookRepository.findAll(BookSpecs.containsIsbn(book.isbn13())).isEmpty()) {
-            throw new BookAlreadyExistException(book.title());
+    public Book createBook(BookCreationRequest bookDetails, MultipartFile cover) {
+        if(!bookRepository.findAll(BookSpecs.containsIsbn(bookDetails.isbn13())).isEmpty()) {
+            throw new BookAlreadyExistException(bookDetails.title());
         }
+        String coverUrl = bookCoverService.uploadCover(cover, bookDetails.isbn13());
         Book b = Book.builder()
-                .title(book.title())
-                .author(book.author())
-                .isbn13(book.isbn13())
-                .isbn10(book.isbn10())
-                .coverUrl(book.coverURL())
-                .language(book.language())
-                .numberOfPages(book.numberOfPages())
-                .description(book.description())
-                .dateOfPublication(book.dateOfPublication())
+                .title(bookDetails.title())
+                .author(bookDetails.author())
+                .isbn13(bookDetails.isbn13())
+                .coverUrl(coverUrl)
+                .language(bookDetails.language())
+                .numberOfPages(bookDetails.numberOfPages())
+                .description(bookDetails.description())
+                .dateOfPublication(bookDetails.dateOfPublication())
                 .build();
 
         return bookRepository.save(b);

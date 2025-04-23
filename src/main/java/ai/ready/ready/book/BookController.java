@@ -9,9 +9,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -32,9 +34,11 @@ public class BookController {
         return new ResponseEntity<>(bookService.getBookById(id, user.getId()), HttpStatus.OK);
     }
 
-    @PostMapping
-    public Book addBook(@RequestBody BookCreationRequest book) {
-        return bookService.createBook(book);
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Book addBook(
+            @RequestParam MultipartFile cover,
+            @RequestPart BookCreationRequest bookDetails) {
+        return bookService.createBook(bookDetails, cover);
     }
 
 

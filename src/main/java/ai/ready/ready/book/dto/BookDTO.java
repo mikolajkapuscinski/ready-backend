@@ -11,7 +11,6 @@ public record BookDTO(
         String title,
         String author,
         String isbn13,
-        String isbn10,
         String coverURL,
         String language,
         Integer numberOfPages,

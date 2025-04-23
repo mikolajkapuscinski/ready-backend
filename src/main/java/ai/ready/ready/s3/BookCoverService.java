@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.net.URL;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class BookCoverService {
     private final S3Client s3Client;
     private final String bucket = "bookcovers-luminar";
 
-    public void uploadCover(MultipartFile file, String bookIsbn) {
+    public String uploadCover(MultipartFile file, String bookIsbn) {
         logger.info("Uploading cover of book with isbn: {}", bookIsbn);
         try {
             s3Client.putObject(PutObjectRequest.builder()
@@ -31,6 +33,8 @@ public class BookCoverService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return getCoverUrl(bookIsbn);
     }
 
     public void deleteCover(String isbn) {
@@ -40,5 +44,11 @@ public class BookCoverService {
                         .key(isbn)
                 .build());
         logger.info("Cover of deleted successfully: {}", isbn);
+    }
+
+    private String getCoverUrl(String isbn) {
+        GetUrlRequest request = GetUrlRequest.builder().bucket(bucket).key(isbn).build();
+        URL url = s3Client.utilities().getUrl(request);
+        return url.toString();
     }
 }
