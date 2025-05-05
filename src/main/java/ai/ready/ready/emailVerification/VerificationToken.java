@@ -1,9 +1,7 @@
 package ai.ready.ready.emailVerification;
 
 import ai.ready.ready.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +16,7 @@ public class VerificationToken {
     private final int TOKEN_EXPIRY_TIME = 1440;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
 

@@ -46,8 +46,8 @@ public class UserService {
                 .roles(Collections.singletonList(roleRepository.findByName("USER")))
                 .build();
 
-        emailVerificationService.sendVerificationEmail(user);
         userRepository.save(user);
+        emailVerificationService.sendVerificationEmail(user);
     }
 
     public List<User> getUsers() {
