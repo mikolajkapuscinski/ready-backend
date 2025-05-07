@@ -49,12 +49,13 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(
                      auth ->{
-                         auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.requestMatchers(
                                  "/register",
                                  "/login",
-                                 "/login/oauth2"
+                                 "/login/oauth2",
+                                 "registrationConfirm"
                                  ).permitAll();
+                         auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.anyRequest().authenticated();
                      }
                 )

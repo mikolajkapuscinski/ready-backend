@@ -26,7 +26,7 @@ public class EmailVerificationService {
 
         String recipient = user.getEmail();
         String subject = "Email confirmation";
-        String confirmationUrl = "http://localhost:5173" + "/registrationConfirm?token=" + token;
+        String confirmationUrl = "http://localhost:5173" + "/#/registrationConfirm?token=" + token;
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(recipient);
         mail.setSubject(subject);
@@ -42,7 +42,7 @@ public class EmailVerificationService {
     public void confirmEmail(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(NotValidVerificationToken::new);
         User user = verificationToken.getUser();
-        if (verificationToken.getExpiryDate().after(new Date())){
+        if (verificationToken.getExpiryDate().before(new Date())){
             throw new VerificationTokenExpired();
         }
         user.setEnabled(true);

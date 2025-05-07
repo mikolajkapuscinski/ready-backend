@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,8 +43,7 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         if (request.getCookies() == null) {
-            throw new AuthenticationCredentialsNotFoundException("No cookie found") {
-            };
+            return null;
         }
         String token = Arrays.stream(request.getCookies())
                 .filter((c) -> c.getName().equals(COOKIE_NAME))
