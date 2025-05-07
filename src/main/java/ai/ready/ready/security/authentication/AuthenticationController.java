@@ -26,7 +26,7 @@ public class AuthenticationController {
         userService.register(request);
     }
 
-    @GetMapping("/registrationConfirm")
+    @PostMapping("/registrationConfirm")
     public void registrationConfirm(@RequestParam final String token) {
         emailVerificationService.confirmEmail(token);
     }
