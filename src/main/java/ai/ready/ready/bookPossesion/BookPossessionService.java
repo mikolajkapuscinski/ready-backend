@@ -27,7 +27,7 @@ public class BookPossessionService {
     private final UserRepository userRepository;
 
     public BookPossession getBookPossession(Long bookId, Long userId) {
-        return bookPossessionRepository.findByBookIdAndUserId(bookId, userId).orElseThrow(BookNotFoundException::new);
+        return bookPossessionRepository.findByBookIdAndUserId(bookId, userId).orElse(null);
     }
 
     public Integer getNumberOfFinishedBooks(Long userId) {

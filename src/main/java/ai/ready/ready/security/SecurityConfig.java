@@ -53,7 +53,8 @@ public class SecurityConfig {
                                  "/register",
                                  "/login",
                                  "/login/oauth2",
-                                 "registrationConfirm"
+                                 "registrationConfirm",
+                                 "/error"
                                  ).permitAll();
                          auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
                          auth.anyRequest().authenticated();

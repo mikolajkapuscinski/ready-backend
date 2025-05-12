@@ -62,11 +62,11 @@ public class RestAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
         if(isOidc) {
-            response.sendRedirect("http://localhost:5173/#/home");
+            response.sendRedirect("http://localhost:5173/home");
         } else {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"message\": \"Login successful\", \"redirectUrl\": \"http://localhost:5173/#/home\"}");
+            response.getWriter().write("{\"message\": \"Login successful\", \"redirectUrl\": \"http://localhost:5173/home\"}");
             response.getWriter().flush();
         }
     }
