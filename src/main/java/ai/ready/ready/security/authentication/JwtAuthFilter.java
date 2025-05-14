@@ -2,6 +2,7 @@ package ai.ready.ready.security.authentication;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -32,7 +33,17 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+        UsernamePasswordAuthenticationToken authentication;
+        try {
+            authentication = getAuthentication(request);
+        } catch (TokenExpiredException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"message\": \"JWT Token has expired\"}");
+            response.getWriter().flush();
+            return;
+        }
         if (authentication == null) {
             chain.doFilter(request, response);
             return;
