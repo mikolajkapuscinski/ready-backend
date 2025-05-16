@@ -29,7 +29,7 @@ public class BookPossessionController {
         };
     }
 
-    @PutMapping("/{bookId}")
+    @PostMapping("/{bookId}")
     public ResponseEntity<BookPossessionDTO> updateBookPossession(
             @AuthenticationPrincipal UserDetailsModel userDetails,
             @PathVariable Long bookId,
@@ -44,6 +44,7 @@ public class BookPossessionController {
     }
 
     @DeleteMapping("/{bookId}")
+    @Transactional
     public ResponseEntity<BookPossessionDTO> deleteBookPossession(
             @AuthenticationPrincipal UserDetailsModel userDetailsModel,
             @PathVariable Long bookId
