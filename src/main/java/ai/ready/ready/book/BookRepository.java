@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
 
     @Query("Select SUM(b.numberOfPages) from Book b join BookPossession bp on bp.book.id = b.id where bp.user.id = :userId and bp.state='FINISHED'")
-    Integer findFinishedPagesByUserId(@Param("userId") Long userId);
+    Optional<Integer> findFinishedPagesByUserId(@Param("userId") Long userId);
 
     @Query("Select b from Book b join BookPossession bp on bp.book.id = b.id where bp.user.id = :userId")
     List<Book> findUsersBook(@Param("userId") Long userId);

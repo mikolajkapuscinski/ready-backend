@@ -35,10 +35,7 @@ public class BookPossessionService {
     }
 
     public Integer getNumberOfFinishedPages(Long userId) {
-        Integer numberOfFinishedPages = bookRepository.findFinishedPagesByUserId(userId);
-        if (numberOfFinishedPages == null)
-            return 0;
-        return numberOfFinishedPages;
+        return bookRepository.findFinishedPagesByUserId(userId).orElse(0);
     }
 
     public List<BookCardDto> getUsersBook(Long userId) {
