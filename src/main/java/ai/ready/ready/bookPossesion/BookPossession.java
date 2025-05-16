@@ -28,23 +28,23 @@ public class BookPossession {
     }
 
     @EmbeddedId
-    BookPossessionKey id;
+    private BookPossessionKey id;
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
     @ManyToOne
     @MapsId("bookId")
     @JoinColumn(name = "book_id")
-    Book book;
+    private Book book;
     @CreationTimestamp
-    LocalDateTime possessionDate;
+    private LocalDateTime possessionDate;
     @Enumerated(EnumType.STRING)
-    BookState state;
-    Integer currentPage;
-    LocalDateTime startDate;
-    LocalDateTime finishDate;
+    private BookState state;
+    private Integer currentPage;
+    private LocalDateTime startDate;
+    private LocalDateTime finishDate;
     @OneToOne
     @JoinColumn(name = "review_id")
-    Review review;
+    private Review review;
 }
