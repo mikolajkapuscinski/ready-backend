@@ -20,6 +20,7 @@ public class BookPossession {
         this.book = book;
         this.user = user;
         this.possessionDate = possessionDate;
+        this.id = new BookPossessionKey(book.getId(), user.getId());
     }
 
     public BookPossession(Book book, User user, LocalDateTime possessionDate, LocalDateTime startDate) {
