@@ -2,14 +2,14 @@ package ai.ready.ready.review;
 
 import ai.ready.ready.user.dto.UserDTO;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public record ReviewDTO(
         Long id,
         String title,
-        UserDTO user,
+        UserDTO reviewer,
         String content,
-        Integer rating,
-        Date createdAt
+        Double rating,
+        LocalDateTime createdAt
 ) {
 }
