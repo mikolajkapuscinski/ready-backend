@@ -10,10 +10,11 @@ import java.time.LocalDateTime;
 @Data
 public class Review {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
     @OneToOne(fetch = FetchType.EAGER)
-    private BookPossession book;
+    private BookPossession bookPossession;
     private String title;
     private Rating rating;
     private String content;
