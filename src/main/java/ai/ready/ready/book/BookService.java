@@ -10,6 +10,8 @@ import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.review.ReviewService;
 import ai.ready.ready.s3.BookCoverService;
+import ai.ready.ready.user.User;
+import ai.ready.ready.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,7 @@ public class BookService {
     private final BookPossessionService bookPossessionService;
     private final BookPossessionDTOMapper bookPossessionDTOMapper;
     private final BookCoverService bookCoverService;
+    private final UserService userService;
 
     public Page<BookCardDto> getBooks(SearchRequest searchCriteria, Pageable pageable) {
         if (searchCriteria == null) {
@@ -48,7 +51,8 @@ public class BookService {
 
     public BookDTO getBookById(Long id, Long userId) {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5));
+        User user = userService.getUserById(userId);
+        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5), user);
         Integer avgRating = reviewService.calculateBookAvgRating(reviews);
         Integer numberOfToReads = bookPossessionService.getNumberOfUsersToReadBook(book.getId());
         Integer numberOfCurrentlyReading = bookPossessionService.getNumberOfUsersReadingBook(book.getId());

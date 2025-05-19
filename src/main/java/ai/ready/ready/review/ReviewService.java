@@ -14,11 +14,11 @@ public class ReviewService {
 
 
     public List<Review> getUserReviews(Long userId, int limit) {
-        return reviewRepository.findReviewsByUserId(userId, Limit.of(limit));
+        return reviewRepository.findReviewByBookPossession_User_Id(userId, Limit.of(limit));
     }
 
     public List<Review> getBookReviews(Long bookId, int limit) {
-        return reviewRepository.findReviewsByBookId(bookId, Limit.of(limit));
+        return reviewRepository.findReviewsByBookPossession_Id_BookId(bookId, Limit.of(limit));
     }
 
     public Integer calculateBookAvgRating(List<ReviewDTO> reviews) {

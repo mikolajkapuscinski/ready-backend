@@ -1,7 +1,7 @@
 package ai.ready.ready.user.dto;
 
 import ai.ready.ready.book.dto.BookCardDto;
-import ai.ready.ready.review.Review;
+import ai.ready.ready.review.ReviewDTO;
 import ai.ready.ready.user.Badge;
 
 import java.util.Date;
@@ -16,6 +16,6 @@ public record ProfileDto (
         List<BookCardDto> toRead,
         ReadingStats readingStats,
         List<Badge> badges,
-        List<Review> reviews,
+        List<ReviewDTO> reviews,
         String aboutMe
 ){}

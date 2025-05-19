@@ -5,7 +5,8 @@ import ai.ready.ready.bookPossesion.BookPossessionService;
 import ai.ready.ready.emailVerification.EmailVerificationService;
 import ai.ready.ready.exceptions.UserAlreadyExistException;
 import ai.ready.ready.exceptions.UserNotFoundException;
-import ai.ready.ready.review.Review;
+import ai.ready.ready.review.ReviewDTO;
+import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.review.ReviewService;
 import ai.ready.ready.security.authentication.dto.UserDetailsModel;
 import ai.ready.ready.security.authentication.dto.RegistrationRequest;
@@ -32,6 +33,7 @@ public class UserService {
     private final ReviewService reviewService;
     private final RoleRepository roleRepository;
     private final EmailVerificationService emailVerificationService;
+    private final ReviewDTOMapper reviewDTOMapper;
 
     public void register(final RegistrationRequest request) {
 
@@ -54,13 +56,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getUserById(final Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public ProfileDto getProfile(UserDetailsModel userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(UserNotFoundException::new);
         ReadingStats readingStats = gatherUserStats(user);
         List<BookCardDto> currentlyReading = bookPossessionService.getCurrentlyReadingByUserId(user.getId(), 10);
         List<BookCardDto> recentlyFinished = bookPossessionService.getRecentlyFinishedByUserId(user.getId(), 10);
         List<BookCardDto> toRead = bookPossessionService.getToReadByUserId(user.getId(), 10);
-        List<Review> reviews = reviewService.getUserReviews(user.getId(), 5);
+        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getUserReviews(user.getId(), 5), user);
         return new ProfileDto(
                 user.getUsername(),
                 user.getImageUrl(),
