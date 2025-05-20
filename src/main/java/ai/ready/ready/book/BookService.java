@@ -10,8 +10,6 @@ import ai.ready.ready.review.ReviewDTOMapper;
 import ai.ready.ready.exceptions.BookNotFoundException;
 import ai.ready.ready.review.ReviewService;
 import ai.ready.ready.s3.BookCoverService;
-import ai.ready.ready.user.User;
-import ai.ready.ready.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +30,6 @@ public class BookService {
     private final BookPossessionService bookPossessionService;
     private final BookPossessionDTOMapper bookPossessionDTOMapper;
     private final BookCoverService bookCoverService;
-    private final UserService userService;
 
     public Page<BookCardDto> getBooks(SearchRequest searchCriteria, Pageable pageable) {
         if (searchCriteria == null) {
