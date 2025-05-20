@@ -51,8 +51,7 @@ public class BookService {
 
     public BookDTO getBookById(Long id, Long userId) {
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        User user = userService.getUserById(userId);
-        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5), user);
+        List<ReviewDTO> reviews = reviewDTOMapper.toReviewDTOList(reviewService.getBookReviews(book.getId(), 5));
         Integer avgRating = reviewService.calculateBookAvgRating(reviews);
         Integer numberOfToReads = bookPossessionService.getNumberOfUsersToReadBook(book.getId());
         Integer numberOfCurrentlyReading = bookPossessionService.getNumberOfUsersReadingBook(book.getId());
